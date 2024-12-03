@@ -1,8 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-//import java.sql.Connection;
-//import java.sql.DriverManager;
-//import java.sql.PreparedStatement;
 import javax.swing.*;
 import java.sql.*;
 
@@ -197,13 +194,17 @@ public class RegistrationForm extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == sub) {
-            if (term.isSelected()) {
-                String name = tname.getText();
-                String email = tmail.getText();
-                String gender = male.isSelected() ? "Male" : "Female";
-                String birthday = year.getSelectedItem() + "-" + (month.getSelectedIndex() + 1) + "-" + date.getSelectedItem();
-                String password = tpass.getText();
+            String name = tname.getText();
+            String email = tmail.getText();
+            String gender = male.isSelected() ? "Male" : "Female";
+            String birthday = year.getSelectedItem() + "-" + (month.getSelectedIndex() + 1) + "-" + date.getSelectedItem();
+            String password = tpass.getText();
 
+            if(email.isEmpty()){
+                res.setText("Insert Email...!");
+            } else if (password.isEmpty()) {
+                res.setText("Insert Password...!");
+            } else if (term.isSelected()) {
                 try {
                     String url = "jdbc:mysql://localhost:3306/logpage";
                     String username = "root";
@@ -224,6 +225,15 @@ public class RegistrationForm extends JFrame implements ActionListener {
                     if (rowsInserted > 0) {
                         res.setText("Registration Successful!");
                     }
+
+                    tname.setText("");
+                    tmail.setText("");
+                    tpass.setText("");
+                    term.setSelected(false);
+                    date.setSelectedIndex(0);
+                    month.setSelectedIndex(0);
+                    year.setSelectedIndex(0);
+                    male.setSelected(true);
 
                     pstmt.close();
                     con.close();
